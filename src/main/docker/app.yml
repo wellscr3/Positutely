@@ -1,0 +1,26 @@
+version: '2'
+services:
+    positutely-app:
+        image: positutely
+        environment:
+            # - _JAVA_OPTIONS=-Xmx512m -Xms256m
+            - SPRING_PROFILES_ACTIVE=prod,swagger
+            - SPRING_DATA_MONGODB_URI=mongodb://positutely-mongodb:27017
+            - SPRING_DATA_MONGODB_DATABASE=positutely
+            - SECURITY_OAUTH2_CLIENT_ACCESS_TOKEN_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/token
+            - SECURITY_OAUTH2_CLIENT_USER_AUTHORIZATION_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/auth
+            - SECURITY_OAUTH2_CLIENT_CLIENT_ID=web_app
+            - SECURITY_OAUTH2_CLIENT_CLIENT_SECRET=web_app
+            - SECURITY_OAUTH2_CLIENT_SCOPE=openid profile email
+            - SECURITY_OAUTH2_RESOURCE_USER_INFO_URI=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/userinfo
+            - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
+        ports:
+            - 8080:8080
+    positutely-mongodb:
+        extends:
+            file: mongodb.yml
+            service: positutely-mongodb
+    keycloak:
+        extends:
+            file: keycloak.yml
+            service: keycloak
